@@ -19,11 +19,7 @@ int main(int argc, const char *argv[]) {
 		}
 	}
 
-	FILE* f = fopen("gradient.tga", "w");
-	img.write_to_file(f);
-	fclose(f);
-
-	printf("Saved image as gradient.tga");
+	img.write_to_file("gradient.tga");
 	
 	return 0;
 }

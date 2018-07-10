@@ -10,8 +10,20 @@ TGAImage::~TGAImage() {
 	delete[] pixels;
 }
 
-int TGAImage::write_to_file(FILE* f) {
-	return (fwrite(header, 18, 1, f) && fwrite(pixels, width * height * 3, 1, f));
+int TGAImage::write_to_file(const char* filename) {
+	FILE* f = fopen(filename, "w");
+	if (f == NULL) {
+		printf("Error opening file %s!", filename);
+		return 0;
+	}
+	int ok = (fwrite(header, 18, 1, f) && fwrite(pixels, width * height * 3, 1, f));
+	if (ok) {
+		printf("Image saved as %s", filename);
+		fclose(f);
+	} else {
+		printf("Error saving as %s!", filename);
+	}
+	return ok;
 }
 
 int TGAImage::set(size_t x, size_t y, KColor color) {

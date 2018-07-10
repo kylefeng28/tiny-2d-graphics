@@ -3,7 +3,6 @@
 
 #include "./utils.h"
 #include <cstdio>
-#include <cstdint>
 
 /*
  * Simple struct representing a Truevision TGA file
@@ -33,7 +32,7 @@ struct TGAImage {
 	TGAImage(uint16_t w, uint16_t h);
 	~TGAImage();
 
-	int write_to_file(FILE* f);
+	int write_to_file(const char* filename);
 
 	int set(size_t x, size_t y, KColor color);
 
