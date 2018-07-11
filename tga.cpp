@@ -1,8 +1,8 @@
 #include "./tga.h"
 
-TGAImage::TGAImage(uint16_t w, uint16_t h) : width(w), height(h)
+TGAImage::TGAImage(const uint16_t w, const uint16_t h) : width(w), height(h)
 {
-	pixels = new uint8_t[width * height * 3];
+	pixels = new uint8_t[width * height * 4];
 	make_tga_header();
 }
 
@@ -16,25 +16,26 @@ int TGAImage::write_to_file(const char* filename) {
 		printf("Error opening file %s!", filename);
 		return 0;
 	}
-	int ok = (fwrite(header, 18, 1, f) && fwrite(pixels, width * height * 3, 1, f));
+	int ok = (fwrite(header, 18, 1, f) && fwrite(pixels, width * height * 4, 1, f));
 	if (ok) {
-		printf("Image saved as %s", filename);
+		printf("Image written to %s", filename);
 		fclose(f);
 	} else {
-		printf("Error saving as %s!", filename);
+		printf("Error writing to %s!", filename);
 	}
 	return ok;
 }
 
-int TGAImage::set(size_t x, size_t y, KColor color) {
+int TGAImage::set(const size_t x, const size_t y, const KColor color) {
 	if (x >= width || y >= height) {
 		return 0;
 	}
 
 	// Little-endian, blue channel goes first
-	pixels[3*(y * width + x)    ] = color.b;
-	pixels[3*(y * width + x) + 1] = color.g;
-	pixels[3*(y * width + x) + 2] = color.r;
+	pixels[4*(y * width + x)    ] = color.b;
+	pixels[4*(y * width + x) + 1] = color.g;
+	pixels[4*(y * width + x) + 2] = color.r;
+	pixels[4*(y * width + x) + 3] = color.a;
 
 	return 1;
 }
@@ -51,7 +52,7 @@ void TGAImage::make_tga_header() {
 	header[14] = 255 & height;
 	header[15] = 255 & (height >> 8);
 	// Pixel depth
-	header[16] = 24; // 24 = true color
+	header[16] = 32; // true color, 8 bits for each RGBA channel
 	// Image descriptor
 	header[17] = 32; // ???
 }

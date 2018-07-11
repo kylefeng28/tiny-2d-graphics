@@ -24,17 +24,17 @@
    */
 
 struct TGAImage {
-	uint16_t width, height;
+	const uint16_t width, height;
 
 	uint8_t header[18];
 	uint8_t* pixels;
 
-	TGAImage(uint16_t w, uint16_t h);
+	TGAImage(const uint16_t w, const uint16_t h);
 	~TGAImage();
 
 	int write_to_file(const char* filename);
 
-	int set(size_t x, size_t y, KColor color);
+	int set(const size_t x, const size_t y, const KColor color);
 
 private:
 	void make_tga_header();
